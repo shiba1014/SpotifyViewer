@@ -1,0 +1,6 @@
+framework module Pods_SpotifyViewer {
+  umbrella header "Pods-SpotifyViewer-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,6 @@
+framework module Pods_Request {
+  umbrella header "Pods-Request-umbrella.h"
+
+  export *
+  module * { export * }
+}
