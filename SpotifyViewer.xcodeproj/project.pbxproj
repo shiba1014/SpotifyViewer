@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B896599240E64C200FE2AFA /* Request.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 527AE5FE24094873009B0F92 /* Request.framework */; };
 		527AE5C324080D40009B0F92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527AE5C224080D40009B0F92 /* AppDelegate.swift */; };
 		527AE5C524080D40009B0F92 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527AE5C424080D40009B0F92 /* SceneDelegate.swift */; };
 		527AE5C724080D40009B0F92 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527AE5C624080D40009B0F92 /* ViewController.swift */; };
@@ -34,6 +35,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4B896597240E64B000FE2AFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 527AE5B724080D40009B0F92 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 527AE5FD24094873009B0F92;
+			remoteInfo = Request;
+		};
+		4B89659B240E64C200FE2AFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 527AE5B724080D40009B0F92 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 527AE5FD24094873009B0F92;
+			remoteInfo = Request;
+		};
 		527AE60324094873009B0F92 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 527AE5B724080D40009B0F92 /* Project object */;
@@ -139,6 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B896599240E64C200FE2AFA /* Request.framework in Frameworks */,
 				60C0D4A0BF723F722202C2D2 /* Pods_Repository.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -351,6 +367,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				4B896598240E64B000FE2AFA /* PBXTargetDependency */,
+				4B89659C240E64C200FE2AFA /* PBXTargetDependency */,
 			);
 			name = Repository;
 			productName = Repository;
@@ -566,6 +584,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4B896598240E64B000FE2AFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 527AE5FD24094873009B0F92 /* Request */;
+			targetProxy = 4B896597240E64B000FE2AFA /* PBXContainerItemProxy */;
+		};
+		4B89659C240E64C200FE2AFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 527AE5FD24094873009B0F92 /* Request */;
+			targetProxy = 4B89659B240E64C200FE2AFA /* PBXContainerItemProxy */;
+		};
 		527AE60424094873009B0F92 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 527AE5FD24094873009B0F92 /* Request */;
@@ -757,6 +785,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
 				DEVELOPMENT_TEAM = U6JP7S27NV;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -772,6 +801,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shiba.Request;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -788,6 +818,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
 				DEVELOPMENT_TEAM = U6JP7S27NV;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -803,6 +834,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shiba.Request;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
