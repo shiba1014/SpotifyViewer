@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else {
             let window = UIWindow(frame: UIScreen.main.bounds)
             self.window = window
-            window.rootViewController = LoginViewController()
+            window.rootViewController = Router.rootViewController
             window.makeKeyAndVisible()
         }
 
@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        // TODO: Handle URL
+        Router.handle(url: url)
         return true
     }
 

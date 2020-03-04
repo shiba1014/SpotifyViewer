@@ -6,7 +6,7 @@
 //  Copyright © 2020 Satsuki Hashiba. All rights reserved.
 //
 
-public struct SpotifySession {
+public struct SpotifySession: Codable {
     public let accessToken: String
     public let refreshToken: String
     public let expirationDate: Date

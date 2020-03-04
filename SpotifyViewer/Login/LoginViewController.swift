@@ -7,10 +7,13 @@
 //
 
 import UIKit
-import WebKit
-import Request
 
 class LoginViewController: UIViewController {
+    private enum Const {
+        static let buttonWidth: CGFloat = 212
+        static let buttonHeight: CGFloat = 48
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,21 +24,23 @@ class LoginViewController: UIViewController {
 private extension LoginViewController {
     func configure() {
         let button = UIButton(frame: .zero)
-        button.backgroundColor = UIColor(red: 29.0/255.0, green: 185.0/255.0, blue: 84.0/255.0, alpha: 1.0)
+        button.backgroundColor = SpotifyColor.green
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = Const.buttonHeight / 2
+        button.clipsToBounds = true
         button.setTitle("Connect with Spotify", for: .normal)
         button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
         view.addSubview(button)
 
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 200),
-            button.heightAnchor.constraint(equalToConstant: 70),
+            button.widthAnchor.constraint(equalToConstant: Const.buttonWidth),
+            button.heightAnchor.constraint(equalToConstant: Const.buttonHeight),
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 
     @objc func tappedButton() {
-        UIApplication.shared.open(Auth.loginUrl)
+        Router.showLoginPage()
     }
 }

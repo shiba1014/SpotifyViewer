@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Request
-import Repository
 
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -19,25 +17,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         self.window = window
-        window.rootViewController = LoginViewController()
+        window.rootViewController = Router.rootViewController
         window.makeKeyAndVisible()
     }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        guard let url = URLContexts.first?.url,
-            let code = Auth.getCode(from: url) else {
-                print("Invalid URL")
-                return
+        guard let url = URLContexts.first?.url else {
+            Router.showError(message: "Unknown error.")
+            return
         }
-
-        Repository.shared.getAccessToken(from: code).startWithResult { result in
-            switch result {
-            case .success(let session):
-                print(session.isValid())
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
+        Router.handle(url: url)
     }
 }
 

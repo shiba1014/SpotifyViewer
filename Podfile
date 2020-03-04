@@ -7,6 +7,7 @@ target 'SpotifyViewer' do
   # Pods for SpotifyViewer
 
   pod 'ReactiveCocoa'
+  pod 'AlamofireImage'
 
   target 'Request' do
     inherit! :search_paths

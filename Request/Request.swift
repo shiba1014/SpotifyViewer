@@ -9,16 +9,13 @@
 import Entity
 
 private enum Const {
-    static let baseUrl: String = "https://accounts.spotify.com/api/"
-    static let authorizationHeader: String = {
-        let authString = "\(ServerSettings.clientId):\(ServerSettings.clientSecret)".data(using: .ascii)!.base64EncodedString(options: [])
-        return "Basic \(authString)"
-    }()
+    static let baseURL: String = "https://api.spotify.com/v1/"
 }
 
 enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
+    case delete = "DELETE"
 }
 
 protocol SpotifyRequest {
@@ -27,19 +24,21 @@ protocol SpotifyRequest {
     var baseURL: URL { get }
     var path: String { get }
     var method: HTTPMethod { get }
-    var queryItems: [URLQueryItem]? { get }
     var headerFields: [String: String]? { get }
-    var bodyParameters: [String: String]? { get }
+    var queryItems: [URLQueryItem]? { get }
+    var bodyParameters: [String: Any]? { get }
+
+    func response(from data: Data, urlResponse: URLResponse) throws -> Response
 }
 
 extension SpotifyRequest {
     var baseURL: URL {
-        URL(string: Const.baseUrl)!
+        URL(string: Const.baseURL)!
     }
 
-    var queryItems: [URLQueryItem]? { nil }
     var headerFields: [String: String]? { nil }
-    var bodyParameters: [String: String]? { nil }
+    var queryItems: [URLQueryItem]? { nil }
+    var bodyParameters: [String: Any]? { nil }
 
     func buildURLRequest() -> URLRequest {
         let url = baseURL.appendingPathComponent(path)
@@ -66,7 +65,9 @@ extension SpotifyRequest {
 
     func response(from data: Data, urlResponse: URLResponse) throws -> Response {
         if case (200..<300)? = (urlResponse as? HTTPURLResponse)?.statusCode {
-            return try JSONDecoder().decode(Response.self, from: data)
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode(Response.self, from: data)
         }
         else {
             throw NSError(domain: "Failed to decode response.", code: -1, userInfo: nil)
@@ -74,65 +75,98 @@ extension SpotifyRequest {
     }
 }
 
-// renewと共通化
+struct GetCurrentProfileRequest: SpotifyRequest {
+    typealias Response = User
 
-struct GetAccessTokenRequest: SpotifyRequest {
+    var path: String = "me"
+    var method: HTTPMethod = .get
+    var headerFields: [String : String]?
+
+    // TODO: SpotifyRequestのdefault implementationにしたい
+    init(session: SpotifySession) {
+        headerFields = [
+            "Authorization": "Bearer \(session.accessToken)"
+        ]
+    }
+}
+
+struct GetPlaylistsListRequest: SpotifyRequest {
+    private enum Const {
+        static let limitCount: Int = 20
+    }
+    
     struct Response: Codable {
-        enum CodingKeys: String, CodingKey {
-            case accessToken = "access_token"
-            case expiresIn = "expires_in"
-            case refreshToken = "refresh_token"
-        }
-
-        let accessToken: String
-        let expiresIn: Double
-        let refreshToken: String
+        let items: [Playlists]?
     }
 
-    var path: String = "token"
-    var method: HTTPMethod = .post
-    var headerFields: [String : String]? = [
-        "Authorization": Const.authorizationHeader,
-        "content-type": "application/x-www-form-urlencoded"
-    ]
-    var bodyParameters: [String: String]?
+    var path: String = "me/playlists"
+    var method: HTTPMethod = .get
+    var headerFields: [String : String]?
+    var queryItems: [URLQueryItem]?
 
-    init(code: String) {
-        bodyParameters = [
-            "code": code,
-            "grant_type": "authorization_code",
-            "redirect_uri": ServerSettings.redirectUri
+    init(limit: Int = Const.limitCount, offset: Int = 0, session: SpotifySession) {
+        headerFields = [
+            "Authorization": "Bearer \(session.accessToken)"
+        ]
+
+        queryItems = [
+            .init(name: "limit", value: String(limit)),
+            .init(name: "offset", value: String(offset)),
         ]
     }
+}
 
-    init(refreshToken: String) {
-        bodyParameters = [
-            "grant_type": "refresh_token",
-            "refresh_token": refreshToken
-        ]
+struct GetPlaylistsTracksRequest: SpotifyRequest {
+    private enum Const {
+        static let limitCount: Int = 100
     }
 
-    func buildGetAccessKeyURLRequest() -> URLRequest {
-        let url = baseURL.appendingPathComponent(path)
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-        if let queryItems = queryItems {
-            components?.queryItems = queryItems
+    struct Response: Codable {
+        var items: [Item]
+
+        struct Item: Codable {
+            var track: Track
         }
+    }
 
-        var urlRequest = URLRequest(url: url)
-        urlRequest.url = components?.url
-        urlRequest.httpMethod = method.rawValue
+    var path: String
+    var method: HTTPMethod = .get
+    var headerFields: [String : String]?
 
-        headerFields?.forEach { key, value in
-            urlRequest.addValue(value, forHTTPHeaderField: key)
-        }
+    init(playlistsId: String, limit: Int = Const.limitCount, offset: Int = 0, session: SpotifySession) {
+        headerFields = [
+            "Authorization": "Bearer \(session.accessToken)"
+        ]
 
-        if let bodyParameters = bodyParameters {
-            urlRequest.httpBody = bodyParameters.map { $0.key + "=" + $0.value }
-                .joined(separator: "&")
-                .data(using: .utf8)
-        }
+        path = "playlists/\(playlistsId)/tracks"
+    }
+}
 
-        return urlRequest
+struct RemoveTrackRequest: SpotifyRequest {
+    struct Response: Codable {
+        var snapshotId: String
+    }
+
+    var path: String
+    var method: HTTPMethod = .delete
+    var headerFields: [String : String]?
+    var bodyParameters: [String : Any]?
+
+    init(playlistsId: String, trackUri: String, position: Int, session: SpotifySession) {
+        path = "playlists/\(playlistsId)/tracks"
+
+        headerFields = [
+            "Authorization": "Bearer \(session.accessToken)",
+            "content-type": "application/json"
+        ]
+
+        let track: [String: Any] = [
+            "uri": trackUri,
+            "positions": [position]
+        ]
+
+        bodyParameters = [
+            "tracks": [track]
+        ]
     }
 }

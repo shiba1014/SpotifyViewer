@@ -1,20 +1,28 @@
 PODS:
+  - Alamofire (5.0.2)
+  - AlamofireImage (4.0.3):
+    - Alamofire (< 6.0.0, >= 5.0.2)
   - ReactiveCocoa (10.2.0):
     - ReactiveSwift (~> 6.2)
   - ReactiveSwift (6.2.1)
 
 DEPENDENCIES:
+  - AlamofireImage
   - ReactiveCocoa
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - AlamofireImage
     - ReactiveCocoa
     - ReactiveSwift
 
 SPEC CHECKSUMS:
+  Alamofire: 3ba7a4db18b4f62c4a1c0e1cb39d7f3d52e10ada
+  AlamofireImage: 3d1a2010519e58675318735580eb856e88840ff7
   ReactiveCocoa: a123c42f449c552460a4ee217dd49c76a17c8204
   ReactiveSwift: 07ddf579f4eb3ee3bd656214f0461aaf2c0fd639
 
-PODFILE CHECKSUM: df6c61ac8c0d953d12cf14083f164eb2b6281e9e
+PODFILE CHECKSUM: 541d87dd4ea3711d05aac8a523470c09b6c7a044
 
 COCOAPODS: 1.9.0
