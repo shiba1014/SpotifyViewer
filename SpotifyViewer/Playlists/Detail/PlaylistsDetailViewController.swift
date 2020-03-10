@@ -99,6 +99,7 @@ private extension PlaylistsDetailViewController {
 
     func remove(track: Track, at position: Int) {
         Repository.shared.removeTrack(playlistsId: playlists.id, trackUri: track.uri, position: position)
+            .observe(on: UIScheduler())
             .startWithResult { [weak self] result in
                 switch result {
                 case .success:

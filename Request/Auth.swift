@@ -20,7 +20,7 @@ public enum Auth {
             .init(name: "client_id", value: ServerSettings.clientId),
             .init(name: "response_type", value: Const.responseType),
             .init(name: "redirect_uri", value: ServerSettings.redirectUri),
-            .init(name: "scope", value: "playlist-modify-public")
+            .init(name: "scope", value: "playlist-modify-public playlist-read-private playlist-modify-private")
         ]
         
         return components.url!

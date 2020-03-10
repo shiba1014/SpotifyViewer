@@ -7,7 +7,7 @@
 //
 
 public struct Image: Codable {
-    public var height: Int
     public var url: String
-    public var width: Int
+    public var height: Int?
+    public var width: Int?
 }

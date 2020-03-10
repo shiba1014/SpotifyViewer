@@ -70,7 +70,7 @@ extension SpotifyRequest {
             return try decoder.decode(Response.self, from: data)
         }
         else {
-            throw NSError(domain: "Failed to decode response.", code: -1, userInfo: nil)
+            throw NSError(domain: "Failed to request.", code: -1, userInfo: nil)
         }
     }
 }
